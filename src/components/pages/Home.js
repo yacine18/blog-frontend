@@ -15,7 +15,9 @@ const Home = () => {
   useEffect(() => {
 
     const fetchData = async () => {
-      await axios.get('https://blog-application-api.herokuapp.com/api/articles')
+      const url = 'https://blog-application-api.herokuapp.com/api/articles'
+      await axios.get(url,{
+      })
         .then(res => {
           setLoading(false)
           setArticles(res.data)

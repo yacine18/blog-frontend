@@ -68,7 +68,6 @@ const EditArticle = (props) => {
                     className="mb-3"
                     id="image"
                     label="Please Choose Image"
-                    custom
                     onChange={ e => setImage(e.target.value) }
                 />
 

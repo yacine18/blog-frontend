@@ -9,36 +9,22 @@ const NewArticle = () => {
 
     const [title, setTitle] = useState()
     const [description, setDescription] = useState()
-    const [image, setImage] = useState()
+    const [path, setPath] = useState()
     const [error, setError] = useState(null)
 
     const history = useHistory()
     const { userData, setUserData } = useContext(UserContext)
-
-    const handleTitle = e => {
-        setTitle(e.target.value)
-        console.log(title)
-    }
-
-    const handleDescription = e => {
-        setDescription(e.target.value)
-        console.log(description)
-    }
-
-    const handleUpload = e => {
-        setImage(e.target.value)
-        console.log(image)
-    }
 
     const submit = async (e) => {
 
         e.preventDefault()
         let token = localStorage.getItem('auth-token')
         const createArticle = { title, description }
+        // const imageUpload = { path }
         {
             userData.user ? (
                 await axios.post('https://blog-application-api.herokuapp.com/api/articles/create', createArticle, {
-                    header: { 'auth-token': token }
+                    header: { 'auth-token': token, 'Authorization': token }
                 })
                     .then(response => {
                         {
@@ -55,7 +41,6 @@ const NewArticle = () => {
                         }
                     })
                     .catch(err => err.response.data.msg && setError(err.response.data.msg))
-                    // .catch(err => console.log(err))
             ) : (
                     history.push('/login')
                 )
@@ -74,19 +59,19 @@ const NewArticle = () => {
             <Form className=" container col-sm-4" onSubmit={submit} >
                 <Form.Group controlId="formGridAddress1">
                     <Form.Label>Title</Form.Label>
-                    <Form.Control placeholder="Enter Title" onChange={handleTitle} />
+                    <Form.Control placeholder="Enter Title" onChange={e => setTitle(e.target.value)} />
                 </Form.Group>
                 <Form.Group controlId="formGridEmail">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" row="3" as="textarea" placeholder="Enter Description" onChange={handleDescription} />
+                    <Form.Control type="text" row="3" as="textarea" placeholder="Enter Description" onChange={ e => setDescription(e.target.value) } />
                 </Form.Group>
 
                 <Form.File
                     className="mb-3"
+                    encType="multipart/form-data"
                     id="image"
-                    label="Please Choose Image"
-                    custom
-                    onChange={handleUpload}
+                    label="Select Image"
+                    onChange={e => setPath(e.target.value)}
                 />
                 <Button variant="primary" className="btn btn-block" type="submit">
                     Submit
