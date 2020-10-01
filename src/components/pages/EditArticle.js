@@ -22,10 +22,13 @@ const EditArticle = (props) => {
             const token = localStorage.getItem('auth-token')
             const articleId = props.match.params.id
             const updatedArticle = { title, description, image }
+            console.log(updatedArticle)
 
             {
                 userData.user ? (
-                    await axios.put(`https://blog-application-api.herokuapp.com/api/articles/edit/${articleId}`, updatedArticle)
+                    await axios.put(`https://blog-application-api.herokuapp.com/api/articles/edit/${articleId}`, updatedArticle,{
+                        headers : { 'x-auth-token': token}
+                    })
                         .then(res => {
                             {
                                 res ? (
@@ -36,9 +39,10 @@ const EditArticle = (props) => {
                             }
                         })
                         .catch(err => err.response.data.msg && setError(err.response.data.msg))
-                ):(
-                    history.push('/login')
-                )}
+                ) : (
+                        history.push('/login')
+                    )
+            }
 
         }
 
@@ -65,10 +69,11 @@ const EditArticle = (props) => {
                 </Form.Group>
 
                 <Form.File
+                    encType="multipart/form-data"
                     className="mb-3"
-                    id="image"
+                    id="path"
                     label="Please Choose Image"
-                    onChange={ e => setImage(e.target.value) }
+                    onChange={e => setImage(e.target.files[0])}
                 />
 
                 <Button variant="primary" className="btn btn-block" type="submit">

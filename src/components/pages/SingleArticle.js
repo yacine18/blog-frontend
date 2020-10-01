@@ -19,8 +19,8 @@ const SingleArticle = (props) => {
     useEffect(() => {
         const oneArticle = async () => {
             try {
-                const Url = "https://blog-application-api.herokuapp.com/api/articles/" + props.match.params.id;
-                await axios.get(Url)
+                const url = "https://blog-application-api.herokuapp.com/api/articles/" + props.match.params.id;
+                await axios.get(url)
                     .then(res => {
                         setArticle(res.data)
                     }
@@ -35,7 +35,7 @@ const SingleArticle = (props) => {
         }
 
         oneArticle()
-    }, [])
+    })
 
 
     const deleteArticle = async (id) => {
@@ -52,10 +52,10 @@ const SingleArticle = (props) => {
                             token: userData.token,
                             user: userData.user
                         })
-                        console.log(response.data.msg)
                         {
                             response ? (
                                 history.push('/')
+                                
                             ) : (
                                     history.push('/article/' + id)
                                 )
@@ -68,23 +68,22 @@ const SingleArticle = (props) => {
         }
 
     }
-
-    const articleImage = `https://blog-application-api.herokuapp.com/${article.image}`
-
+    
+    const articleImage = `http://localhost:5000/${article.image}`
     return (
-        
         <div className="container mt-5">
 
             {error && (
                 <ErrorsAlert message={error} clearError={() => setError(undefined)} />
             )}
             
-           
+          
             <div >
                 <Card className="container" >
                     <div>
+                        
+                        <Card.Img variant="top" className="container mt-3" align="center" height="300px" alt="articleImage" src={articleImage} />
                         <Card.Title className="mt-4 mr-5 ml-5">{article.title}</Card.Title>
-                        <Card.Img variant="top" className="container mt-2" align="center" alt="articleImage" src={articleImage} />
                         <Card.Body>
                             <Card.Text className="mr-5 ml-5 mt-2 mb-4">
                                 {article.description}

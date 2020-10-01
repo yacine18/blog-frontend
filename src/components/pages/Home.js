@@ -16,7 +16,7 @@ const Home = () => {
 
     const fetchData = async () => {
       const url = 'https://blog-application-api.herokuapp.com/api/articles'
-      await axios.get(url,{
+      await axios.get(url, {
       })
         .then(res => {
           setLoading(false)
@@ -30,39 +30,47 @@ const Home = () => {
   }, [])
 
   return (
-      <div className="container mt-5">
-        {error && (
-          <ErrorsAlert message={error} clearError={() => setError(undefined)} />
+    <div className="container mt-5">
+      {error && (
+        <ErrorsAlert message={error} clearError={() => setError(undefined)} />
+      )}
+
+      <div className="row mr-3 ml-4 my-auto px-2">
+
+        {loading && <Spinner animation="border" className="mx-auto mt-5" variant="primary" />}
+        {articles.length > 0 ? (
+          
+          <>
+          {loading && <Spinner animation="border" className="mx-auto mt-5" variant="primary" />}
+            {articles.map(article => {
+               const articleImage = `https://blog-application-api.herokuapp.com/${article.image}`
+              return (
+                <Card className="mb-3 mr-3 ml-2" style={{ width: '18rem' }} key={article._id}>
+                  <Card.Img variant="top" alt="article_image" src={articleImage} />
+                  <Card.Body>
+                    <Card.Title>{article.title}</Card.Title>
+                    <Card.Text>
+                      {article.description}
+                    </Card.Text>
+                    <Link className="text-decoration-none" to={'/article/' + article._id}>
+                      <Button className="btn-block" variant="light">Read More</Button>
+                    </Link>
+                  </Card.Body>
+
+
+                </Card>
+
+              )
+
+            })}
+
+          </>
+        ):(
+            <h5 className="mx-auto mt-5">No Articles Available</h5>
         )}
 
-        <div className="row mr-3 ml-4 my-auto px-2">
-
-            {loading && <Spinner animation="border" className="mx-auto mt-5" variant="primary" />}
-            
-              {articles.map(article => {
-                 const articleImage = `https://blog-application-api.herokuapp.com/${article.image}`
-                  return (
-                    <Card className="mb-3 mr-3 ml-2" style={{ width: '18rem' }} key={article._id}>
-                      <Card.Img variant="top" alt="articleImage" src={articleImage} />
-                      <Card.Body>
-                        <Card.Title>{article.title}</Card.Title>
-                        <Card.Text>
-                          {article.description}
-                        </Card.Text>
-                        <Link className="text-decoration-none" to={'/article/' + article._id}>
-                          <Button className="btn-block" variant="light">Read More</Button>
-                        </Link>
-                      </Card.Body>
-                     
-                               
-                    </Card>
-                    
-                  )
-                
-              })}
-            
-        </div>
       </div>
+    </div>
   )
 
 }

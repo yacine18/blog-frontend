@@ -9,26 +9,35 @@ const NewArticle = () => {
 
     const [title, setTitle] = useState()
     const [description, setDescription] = useState()
-    const [path, setPath] = useState()
+    const [image, setImage] = useState(null)
+    const [fileName, setFileName] = useState("Selete an Image")
     const [error, setError] = useState(null)
 
     const history = useHistory()
     const { userData, setUserData } = useContext(UserContext)
 
+    const onChange = e => {
+        setImage(e.target.files[0])
+        setFileName(e.target.files[0].name)
+    }
+
     const submit = async (e) => {
 
         e.preventDefault()
         let token = localStorage.getItem('auth-token')
+        const formData = new FormData()
+        formData.append('image', image)
         const createArticle = { title, description }
-        // const imageUpload = { path }
+        console.log(createArticle)
         {
             userData.user ? (
-                await axios.post('https://blog-application-api.herokuapp.com/api/articles/create', createArticle, {
-                    header: { 'auth-token': token, 'Authorization': token }
+                await axios.post('https://blog-application-api.herokuapp.com/create', createArticle, formData, {
+                    headers: { 'x-auth-token': token }
                 })
                     .then(response => {
+                        console.log(response.data)
                         {
-                            console.log(userData.user)
+                            
                             setUserData({
                                 token: userData.token,
                                 user: userData.user
@@ -63,15 +72,17 @@ const NewArticle = () => {
                 </Form.Group>
                 <Form.Group controlId="formGridEmail">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" row="3" as="textarea" placeholder="Enter Description" onChange={ e => setDescription(e.target.value) } />
+                    <Form.Control type="text" row="3" as="textarea" placeholder="Enter Description" onChange={e => setDescription(e.target.value)} />
                 </Form.Group>
 
                 <Form.File
                     className="mb-3"
                     encType="multipart/form-data"
-                    id="image"
-                    label="Select Image"
-                    onChange={e => setPath(e.target.value)}
+                    id="path"
+                    name="path"
+                    label={fileName}
+                    custom
+                    onChange={onChange}
                 />
                 <Button variant="primary" className="btn btn-block" type="submit">
                     Submit

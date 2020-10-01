@@ -11,6 +11,7 @@ import UserContext from './context/UserContext'
 import NewArticle from './components/pages/NewArticle'
 import SignleArticle from './components/pages/SingleArticle'
 import EditArticle from './components/pages/EditArticle'
+import EditProfile from './components/auth/EditProfile'
 import Footer from './components/pages/Footer'
 
 
@@ -18,9 +19,8 @@ function App() {
 
   const [userData, setUserData] = useState({
     token: undefined,
-    user: undefined
+    user: undefined,
   })
-
   useEffect(() => {
     const checkLoggedIn = async () => {
       let token = localStorage.getItem('auth-token')
@@ -65,6 +65,7 @@ function App() {
           <Route path="/new" component={NewArticle} />
           <Route path="/article/:id" component={SignleArticle} />
           <Route path="/edit/:id" component={EditArticle} />
+          <Route path="/user/edit/:id" component={EditProfile} />
         </Switch>
         <Footer />
     </UserContext.Provider>
