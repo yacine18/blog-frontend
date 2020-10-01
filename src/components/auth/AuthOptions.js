@@ -26,16 +26,11 @@ const AuthOptions = () => {
     return (
         <div>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-             
-                {userData.isAdmin ? (
-                    <Link to="/dashboard">
-                        <Navbar.Brand className="ml-4">Admin Panel</Navbar.Brand>
-                    </Link>
-                ):(
-                    <Link to="/">
+
+
+                <Link to="/">
                     <Navbar.Brand className="ml-4">MERN Blog</Navbar.Brand>
                 </Link>
-                )}
 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
